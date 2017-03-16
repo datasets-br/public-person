@@ -1,4 +1,4 @@
-**public-person dataset**:  Identifying unically Brazilian public persons.
+**public-person dataset**:  identifying unically Brazilian public persons.
 
 Semantic as [schema.org](http://schema.org/docs/schemas.html) (`sc`) complemented by [Wikidata](https://www.wikidata.org) (`wd`):
 
@@ -23,7 +23,7 @@ This package includes SQL scripts to fetch information and filter it.
 
 ### data/tse-*.csv
 
-... Run GNU Make to generate data file:
+... Run script ... see also [rafonseca/tse-data/collect_and_make_csv.ipynb](https://github.com/rafonseca/tse-data/blob/master/collect_and_make_csv.ipynb) data analysis.
 
 ### data/xxx*.csv
 ...
