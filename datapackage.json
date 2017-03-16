@@ -1,0 +1,47 @@
+{
+  "name": "public-person",
+  "title": "Identifying unically Brazilian public persons",
+  "format": "csv",
+  "datapackage_version": "1.0.0-alpha.1",
+  "last_modified": "2017-03-16",
+  "licenses": [
+    {
+      "type": "ODC-PDDL-1.0",
+      "url": "http://opendatacommons.org/licenses/pddl/1.0/"
+    }
+  ],
+  "sources": [
+    {
+      "name": "Repositório de dados eleitorais",
+      "web": "http://www.tse.jus.br/hotSites/pesquisas-eleitorais/candidatos.html"
+    },
+    {
+      "name": "Wikipédia, a enciclopédia livre",
+      "web": "https://pt.wikipedia.org/wiki/Categoria:Nascidos_por_ano"
+    }
+  ],
+  "resources": [
+    {
+      "url": "https://github.com/datasets-br/public-person/raw/master/data/tse-candidatos-2016.csv",
+      "path": "data/tse-candidatos-2016.csv",
+      "schema": {
+        "fields": [
+          {
+            "name": "name",
+            "description": "Nome completo da pessoa, nome oficial conforme CPF",
+            "type": "string"
+          },
+          {
+            "name": "vatID-CPF",
+            "description": "CPF (11 dígitos) da pessoa",
+            "type": "string"
+          }
+        ]
+      }
+    }
+  ],
+  "maintainers":[{
+    "name": "Peter Krauss",
+    "web": "https://github.com/datasets-br/public-person"
+  }]
+}
