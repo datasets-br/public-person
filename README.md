@@ -2,7 +2,7 @@
 
 Semantic as [schema.org](http://schema.org/docs/schemas.html) (`sc`) complemented by [Wikidata](https://www.wikidata.org) (`wd`):
 
-![](docs/assets/PUBLIC-PERSON-iconREf1b-180px.png)
+![](docs/assets/datasets-public-person-logo-v1-180px.png)
 
 * **name** as [sc:Person](https://schema.org/Person)/[sc:name](https://schema.org/name) (full name).
 
