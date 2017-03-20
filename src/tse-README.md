@@ -10,9 +10,8 @@ python tse-getZips.py # or run in background "&"
 recode ISO-8859-1..UTF-8 *.txt # or &
 
 python tse-makeCSV.py
-cp *.csv /tmp  # make a copy on folder with all permissions`
 
-psql -h localhost -U postgres restest < tse.sql
+psql -h localhost -U postgres restest < tse.sql # wait 1h
 ```
 
 There are 3520846 full-names, but 1492419 distinct. There are some little of names with problems, as  "0DÁRICO", "0SEAS", and "ABRRAÃO".
