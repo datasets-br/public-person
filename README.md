@@ -1,8 +1,8 @@
 **public-person dataset**:  identifying unically Brazilian public persons.
 
-Semantic as [schema.org](http://schema.org/docs/schemas.html) (`sc`) complemented by [Wikidata](https://www.wikidata.org) (`wd`):
-
 ![](docs/assets/datasets-public-person-logo-v1-180px.png)
+
+Semantic as [schema.org](http://schema.org/docs/schemas.html) (`sc`) complemented by [Wikidata](https://www.wikidata.org) (`wd`):
 
 * **name** as [sc:Person](https://schema.org/Person)/[sc:name](https://schema.org/name) (full name).
 
