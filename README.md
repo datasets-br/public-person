@@ -1,6 +1,6 @@
 **public-person dataset**:  identifying unically Brazilian public persons.
 
-![](docs/assets/datasets-public-person-logo-v1-180px.png)
+&nbsp;&nbsp;&nbsp;&nbsp; ![](docs/assets/datasets-public-person-logo-v1-180px.png)
 
 Semantic as [schema.org](http://schema.org/docs/schemas.html) (`sc`) complemented by [Wikidata](https://www.wikidata.org) (`wd`):
 
@@ -11,24 +11,14 @@ Semantic as [schema.org](http://schema.org/docs/schemas.html) (`sc`) complemente
 
 The main source for "valid public names" (and license to use here) are the Brazilians [Official Gazettes](https://en.wikipedia.org/wiki/Government_gazette).
 
-## Data sources
+## Data sources and preparation
 
 Data comes from multiple sources as follows:
 
-... TSE ... See [datapackage.json](datapackage.json)...
+* TSE - Tribunal Superior Eleitoral. [Preparation here](src/tse-README.md). Produces `data/tse-*.csv` files and/or SQL.
+* ...
 
-## Preparation
-
-This package includes SQL scripts to fetch information and filter it.
-
-...
-
-### data/tse-*.csv
-
-... Run script ... see also [rafonseca/tse-data/collect_and_make_csv.ipynb](https://github.com/rafonseca/tse-data/blob/master/collect_and_make_csv.ipynb) data analysis.
-
-### data/xxx*.csv
-...
+For CSV files description, see [datapackage.json](datapackage.json).
 
 ## License
 
