@@ -1,22 +1,42 @@
-CREATE EXTENSION file_fdw;
-CREATE SERVER files FOREIGN DATA WRAPPER file_fdw;
+CREATE EXTENSION IF NOT EXISTS PLpythonU;
 
-CREATE FOREIGN TABLE temp1 (id int, urlref text, filename text)
-   SERVER files OPTIONS (
-     filename '/tmp/tse-fontes.csv',
-       format 'csv',
-       header 'true'
-   );
+-- -- -- --
+CREATE schema IF NOT EXISTS lib;
 
+CREATE FUNCTION lib.get_csvfile(
+  file text,
+  delim_char char(1) = ',',
+  quote_char char(1) = '"'
+) RETURNS setof text[]  AS $f$
+  import csv
+  return csv.reader(
+     open(file, 'rb'), 
+     quotechar=quote_char, 
+     delimiter=delim_char, 
+     skipinitialspace=True, 
+     escapechar='\\'
+  )
+$f$ immutable language PLpythonU;
+-- for lib.get_csvline() see http://stackoverflow.com/a/42929480/287948
 
-CREATE FOREIGN TABLE temp2 (year int, state text, name text, bdate text, cpf text,fonte_id int)
-   SERVER files OPTIONS (
-     filename '/tmp/tse-FIM.csv',
-       format 'csv',
-       header 'true'
-   );
+CREATE or replace FUNCTION lib.csv_scan_sources(
+   filepath text  -- something as '/tmp/test/*.txt'
+) RETURNS text[]  AS $f$
+  import glob
+  # import numpy as np
+  #np.asarray( sorted(glob.glob(filepath)) )
+  dataset_list = ';'.join(sorted(glob.glob(filepath)))
+  dataset_array = []
+  for item in dataset_list.split(';'): # comma, or other
+     dataset_array.append(item)
+  dataset_array
+$f$ immutable language PLpythonU;
+
 
 -- -- -- -- -- -- --
+
+select x from unnest( lib.csv_scan_sources('/tmp/TSE2/*.txt') ) t(x);
+
 
 CREATE TABLE pubperson.source (
  id bigserial NOT NULL PRIMARY KEY,
