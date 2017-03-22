@@ -40,9 +40,9 @@ CREATE INDEX idx_fullname ON pubperson.person (name);
  * Auxiliar cache, for person's first-name frequency analysis. 
  */
 CREATE MATERIALIZED VIEW pubperson.kx_firstname AS
- SELECT regexp_replace(fullname,'\s.+$', '') AS word, 
+ SELECT regexp_replace(name,'\s.+$', '') AS word, 
         count(*) AS freq
- FROM pubperson.br_tse_person
+ FROM pubperson.person
  GROUP BY 1
  ORDER BY 1
 ;
