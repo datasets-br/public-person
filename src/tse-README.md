@@ -22,7 +22,7 @@ The newer data are better, so, when repeat we can select only the last version.
 * 59% (2081277 items) have [birthDate](https://schema.org/birthDate) valid property.
 * xx% (xxx items) have [vatID](https://schema.org/vatID) (Brazilian CPF) valid property.
 * There are 1492419? distinct names.
-* The origin was ... files `candidato_*.txt` and the its fields are not uniform. 
+* There are 310 source files `consulta_cand*.txt`, and the its fields are not uniform. 
 * Supposing uniformity, the relevant fields are at positions 3,6,11,14 and 27 (from 1), and secondary positions 15,28 and 31. Supposing corresponds respectivally to fields (of the LEIAME documentation) `ANO_ELEICAO`,`SIGLA_UF`,`NOME_CANDIDATO`,`CPF_CANDIDATO`,`DATA_NASCIMENTO`,  `NOME_URNA_CANDIDATO`,`NUM_TITULO_ELEITORAL_CANDIDATO`,`SEXO`.
 
 
