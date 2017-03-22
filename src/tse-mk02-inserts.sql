@@ -42,28 +42,28 @@ SELECT lib.set_serial_tomax('pubperson.source','id');
  */
 
 -- get from all CSV files
-DROP TEMPORARY TABLE IF EXISTS tmp_fullcheck;
+DISCARD TEMPORARY;
 CREATE TEMPORARY TABLE tmp_fullcheck AS 
   SELECT  s.id, lib.array_select_idx(c,array[3,6,11,14,27,  15,28,31]) as c
     -- 'ANO_ELEICAO','SIGLA_UF','NOME_CANDIDATO','CPF_CANDIDATO','DATA_NASCIMENTO'
     -- 'NOME_URNA_CANDIDATO','NUM_TITULO_ELEITORAL_CANDIDATO','SEXO'
-  FROM pubperson.source s, LATERAL lib.get_csvfile(s.info->>'file',';') g(c)
-  WHERE s.id>0 AND s.id<100;  -- (IF LOW MEMORY) "where" if low memory
+  FROM pubperson.source s, LATERAL lib.get_csvfile(s.info->>'data_item',';') g(c)
+  WHERE s.id>0 AND s.id<100;  -- (WHEN LOW MEMORY) needs "where"
 
-  -- IF LOW MEMORY (Python consumes a lot!) SPLIT INTO id SEGMENTS:
+  -- WHEN LOW MEMORY (Python consumes a lot!) SPLIT INTO id SEGMENTS:
 	INSERT INTO tmp_fullcheck(id,c) 
 	  SELECT  s.id, lib.array_select_idx(c,array[3,6,11,14,27,  15,28,31]) as c
-	  FROM pubperson.source s, LATERAL lib.get_csvfile(s.info->>'file',';') g(c)
+	  FROM pubperson.source s, LATERAL lib.get_csvfile(s.info->>'data_item',';') g(c)
 	  WHERE s.id>=100 AND s.id<200;
 	INSERT INTO tmp_fullcheck(id,c) 
 	  SELECT  s.id, lib.array_select_idx(c,array[3,6,11,14,27,  15,28,31]) as c
-	  FROM pubperson.source s, LATERAL lib.get_csvfile(s.info->>'file',';') g(c)
+	  FROM pubperson.source s, LATERAL lib.get_csvfile(s.info->>'data_item',';') g(c)
 	  WHERE s.id>=200 AND s.id<280;
 	INSERT INTO tmp_fullcheck(id,c) 
 	  SELECT  s.id, lib.array_select_idx(c,array[3,6,11,14,27,  15,28,31]) as c
-	  FROM pubperson.source s, LATERAL lib.get_csvfile(s.info->>'file',';') g(c)
+	  FROM pubperson.source s, LATERAL lib.get_csvfile(s.info->>'data_item',';') g(c)
 	  WHERE s.id>=280 AND s.id<400;
-  -- END IF
+  -- END WHEN.
 
 
 /**
@@ -72,7 +72,7 @@ CREATE TEMPORARY TABLE tmp_fullcheck AS
 INSERT INTO pubperson.person(source_id,name,birthDate,info)
   SELECT max(id) as source_id, 
          nome, 
-	 bdate,
+         bdate,
          jsonb_build_object('source_ids',array_agg(id), 'vatid_cpfs',array_agg(cpf))
   FROM (
     SELECT id, trim(c[3]) as nome, 
@@ -80,10 +80,10 @@ INSERT INTO pubperson.person(source_id,name,birthDate,info)
            lib.parse_birth_br2iso(c[5]) as bdate 
     FROM tmp_fullcheck
   ) t
-  WHERE cpf IS NOT NULL AND bdate IS NOT NULL
+  WHERE cpf IS NOT NULL AND bdate IS NOT NULL -- discards invalids
   GROUP BY nome,bdate
+ON CONFLICT DO NOTHING  -- discards invalid, eg. bdate '1963-2-29', or duplications.
 ;
-
 
 /**
  * After all.
