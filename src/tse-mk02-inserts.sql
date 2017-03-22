@@ -25,7 +25,7 @@ CREATE VIEW pubperson.vw_tmp_sources AS
  */
 INSERT INTO pubperson.source(id,label,info)
   SELECT id,
-         format('%s;%s:%s:%s:%s',lower(country),lower(ano_uf[2]),authority,data_group,ano_uf[1]) as label,
+         format('%s:%s:%s:%s',lower(country),authority,data_group,lower(ano_uf[2])||';'||ano_uf[1]) as label,
          jsonb_build_object(
              'year',ano_uf[1],             'country',upper(country),
 	     'authority',authority,        'data_group',data_group,
@@ -35,6 +35,10 @@ INSERT INTO pubperson.source(id,label,info)
    FROM pubperson.vw_tmp_sources
 ;
 SELECT lib.set_serial_tomax('pubperson.source','id');
+
+INSERT INTO pubperson.source(label,info) VALUES
+   ('br:tse',jsonb_build_object('country','BR',  'authority','tse', 'name','Tribunal Superior Eleitoral', 'url','http://tse.jus.br'))
+;
 
 
 /**

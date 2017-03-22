@@ -309,3 +309,4 @@ source_id,label,data_item,isBasedOnUrl
 308,br;se:tse:candidatos:2016,consulta_cand_2016_SE.txt,http://www.tse.jus.br/eleicoes/estatisticas/repositorio-de-dados-eleitorais
 309,br;sp:tse:candidatos:2016,consulta_cand_2016_SP.txt,http://www.tse.jus.br/eleicoes/estatisticas/repositorio-de-dados-eleitorais
 310,br;to:tse:candidatos:2016,consulta_cand_2016_TO.txt,http://www.tse.jus.br/eleicoes/estatisticas/repositorio-de-dados-eleitorais
+311,br:tse,,
