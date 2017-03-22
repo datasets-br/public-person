@@ -1,6 +1,8 @@
-### adapted from https://github.com/rafonseca/tse-data/blob/master/collect_and_make_csv.ipynb
-### USAGE: python tse-getZips.py &
-
+###
+# PubPerson's database, TSE data preparation. Get all data from Web.
+# Adapted from https://github.com/rafonseca/tse-data/blob/master/collect_and_make_csv.ipynb
+# USAGE: python tse-mk01-getZips.py &
+###
 
 import urllib
 import zipfile

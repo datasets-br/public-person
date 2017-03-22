@@ -1,18 +1,38 @@
 
-## TSE data preparation
+## TSE-candidatos data preparation
 
-Source data at http://agencia.tse.jus.br/estatistica/sead/odsele/consulta_cand/
+**TSE** (Tribunal Superior Eleitoral) is a official source of data, at http://agencia.tse.jus.br/estatistica/sead/odsele/consulta_cand/
+
+The scripts will transfer all zip files to `/tmp/tse_transfer` folder and the selected data to the PostgreSQL database. 
+Use [core refresh](core-README.md) (the `python core-refresh-csv.py tse` command) to update the PubPerson's data folder with the new TSE database.
+
+If pubpeson core was started, make all TSE preparation with `sh tse-mk00.sh`. To run in background, prefer copy/paste each line of [the shell script](tse-mk00.sh).
+
+Tips:
+
+* for use PostgreSQL's Python extension in UBUNTU, use `apt install postgresql-contrib postgresql-plpython`.
+* The data source have problems with header, see LEIAME.pdf and complete [the control spreadsheet](xxx)
+
+## TSE-candidatos data analysis
+
+There are 3.5 million (3520846) data items, but many are repeated (each election year). 
+The newer data are better, so, when repeat we can select only the last version.
+
+* all (100%) have [name](https://schema.org/name) (full name) valid property.
+* 59% (2081277 items) have [birthDate](https://schema.org/birthDate) valid property.
+* xx% (xxx items) have [vatID](https://schema.org/vatID) (Brazilian CPF) valid property.
+* There are 1492419? distinct names.
+* The origin was ... files `candidato_*.txt` and the its fields are not uniform. 
+* Supposing uniformity, the relevant fields are at positions 3,6,11,14 and 27 (from 1), and secondary positions 15,28 and 31. Supposing corresponds respectivally to fields (of the LEIAME documentation) `ANO_ELEICAO`,`SIGLA_UF`,`NOME_CANDIDATO`,`CPF_CANDIDATO`,`DATA_NASCIMENTO`,  `NOME_URNA_CANDIDATO`,`NUM_TITULO_ELEITORAL_CANDIDATO`,`SEXO`.
 
 
-```sh
-python tse-getZips.py # or run in background "&"
+Other results:
+* There are some little of names with problems, as  "0DÁRICO", "0SEAS", and "ABRRAÃO", as showed by `pubperson.kx_firstname` table.
+* ... Unique name-birthDate entries
+* ... unique valid vatIDs
 
-recode ISO-8859-1..UTF-8 *.txt # or &
+## TSE-filiados data preparation
 
-python tse-makeCSV.py
-
-psql -h localhost -U postgres dbname < tse.sql # wait 1h
-```
-
-There are 3520846 full-names, but 1492419 distinct. There are some little of names with problems, as  "0DÁRICO", "0SEAS", and "ABRRAÃO".
+Under construction. Not seems good data, no `birthDate` and no CPF.
+Official source at  http://www.tse.jus.br/partidos/filiacao-partidaria/relacao-de-filiados
 
