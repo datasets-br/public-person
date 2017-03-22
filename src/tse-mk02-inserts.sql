@@ -82,7 +82,7 @@ INSERT INTO pubperson.person(source_id,name,birthDate,info)
   ) t
   WHERE cpf IS NOT NULL AND bdate IS NOT NULL -- discards invalids
   GROUP BY nome,bdate
-ON CONFLICT DO NOTHING  -- discards invalid, eg. bdate '1963-2-29', or duplications.
+ON CONFLICT DO NOTHING  -- discards duplications. (DANGER?)
 ;
 
 /**
