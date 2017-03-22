@@ -93,7 +93,7 @@ CREATE OR REPLACE FUNCTION lib.array_select_idx(
    ) t2;
 $f$ immutable language SQL;
 
-
+--- ---- -----
 
 /**
  * Extracts Brazilian's birth day from a "old standard" string.
@@ -119,8 +119,17 @@ $f$ immutable language SQL;
  * @return date internal format.
  */
 CREATE OR REPLACE FUNCTION lib.parse_birth_br2iso(text) RETURNS date AS $f$
-	SELECT CASE WHEN array_length(d,1) IS NULL THEN NULL::date ELSE format('%s-%s-%s',d[3],d[2],d[1])::date END 
+DECLARE
+  aux text;
+BEGIN
+	SELECT CASE WHEN 
+		array_length(d,1) IS NULL THEN NULL::text 
+		ELSE format('%s-%s-%s',d[3],d[2],d[1]) 
+	       END INTO aux
 	FROM lib.parse_birth_br($1) t(d);
-$f$ immutable language SQL;
-
+	RETURN aux::date;
+	EXCEPTION WHEN others THEN   -- avoids out of range as 1963-2-29
+		RETURN NULL::date; 
+END;
+$f$ immutable language PLpgSQL;
 
