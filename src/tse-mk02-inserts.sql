@@ -16,7 +16,7 @@ CREATE VIEW pubperson.vw_tmp_sources AS
          'tse'::text as authority,
          'candidatos'::text as data_group,
          regexp_matches(item, '(\d\d\d\d)_(..).txt$') as ano_uf,
-         item
+         regexp_replace(item,'^.+/','') as item  -- only filename
   FROM lib.csv_scan_sources('/tmp/tse_transfer/consulta_cand*.*') t(item)
   ORDER BY item;
 
