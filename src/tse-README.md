@@ -11,7 +11,11 @@ If pubpeson core was started, make all TSE preparation with `sh tse-mk00.sh`. To
 Tips:
 
 * for use PostgreSQL's Python extension in UBUNTU, use `apt install postgresql-contrib postgresql-plpython`.
-* The data source have problems with header, see LEIAME.pdf and complete [the control spreadsheet](xxx)
+* The data source have problems with header, see LEIAME.pdf and complete **[the control spreadsheet](https://docs.google.com/spreadsheets/d/1FpWvyi3UTda-UOFYxshf0Vg03oYY_cSukHE6ZrGjn2w/edit#gid=1692329256)**
+* ... Data of TSE is a bit dirty,
+   * there are unrevised names like "0DÁRICO", "0SEAS", and "ABRRAÃO".
+   * there are a lot of invalid birth dates and invalid CPF, losting records. 
+* ... and the dataset description is a mess: not use CSV header, but each file needs different interpretation.
 
 ## TSE-candidatos data analysis
 
@@ -24,7 +28,6 @@ The newer data are better, so, when repeat we can select only the last version.
 * There are 1492419? distinct names.
 * There are 310 source files `consulta_cand*.txt`, and the its fields are not uniform. 
 * Supposing uniformity, the relevant fields are at positions 3,6,11,14 and 27 (from 1), and secondary positions 15,28 and 31. Supposing corresponds respectivally to fields (of the LEIAME documentation) `ANO_ELEICAO`,`SIGLA_UF`,`NOME_CANDIDATO`,`CPF_CANDIDATO`,`DATA_NASCIMENTO`,  `NOME_URNA_CANDIDATO`,`NUM_TITULO_ELEITORAL_CANDIDATO`,`SEXO`.
-
 
 Other results:
 * There are some little of names with problems, as  "0DÁRICO", "0SEAS", and "ABRRAÃO", as showed by `pubperson.kx_firstname` table.
