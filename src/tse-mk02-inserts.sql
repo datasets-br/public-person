@@ -12,10 +12,10 @@
 DROP VIEW IF EXISTS pubperson.vw_tmp_sources;
 CREATE VIEW pubperson.vw_tmp_sources AS
   SELECT row_number() OVER () as id,
-         'br' as country,
-         'tse' as authority,
-         'candidatos' as data_group,
-         regexp_matches(item, '(\d\d\d\d)_(..).txt$') as ano_uf, 
+         'br'::text as country,
+         'tse'::text as authority,
+         'candidatos'::text as data_group,
+         regexp_matches(item, '(\d\d\d\d)_(..).txt$') as ano_uf,
          item
   FROM lib.csv_scan_sources('/tmp/tse_transfer/consulta_cand*.*') t(item)
   ORDER BY item;
@@ -24,8 +24,8 @@ CREATE VIEW pubperson.vw_tmp_sources AS
  * Metadata of all TSE official sources.
  */
 INSERT INTO pubperson.source(id,label,info)
-  SELECT id, 
-         'br;'|| lower(ano_uf[2]) ||':tse:candidatos:'||ano_uf[1] AS label, 
+  SELECT id,
+         format('%s;%s:%s:%s:%s',lower(country),lower(ano_uf[2]),authority,data_group,ano_uf[1]) as label,
          jsonb_build_object(
              'year',ano_uf[1],             'country',upper(country),
 	     'authority',authority,        'data_group',data_group,
