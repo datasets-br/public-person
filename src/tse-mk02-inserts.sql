@@ -1,5 +1,5 @@
 /**
- * TSE inserts for PubPerson. 
+ * TSE inserts for PubPerson.
  * run after core.
  * @version 1.0.0
  * @see https://github.com/datasets-br/public-person
@@ -48,7 +48,7 @@ INSERT INTO pubperson.source(label,info) VALUES
 
 -- get from all CSV files
 DISCARD TEMPORARY;
-CREATE TEMPORARY TABLE tmp_fullcheck AS 
+CREATE TEMPORARY TABLE tmp_fullcheck AS
   SELECT  s.id, lib.array_select_idx(c,array[3,6,11,14,27,  15,28,31]) as c
     -- 'ANO_ELEICAO','SIGLA_UF','NOME_CANDIDATO','CPF_CANDIDATO','DATA_NASCIMENTO'
     -- 'NOME_URNA_CANDIDATO','NUM_TITULO_ELEITORAL_CANDIDATO','SEXO'
@@ -56,15 +56,15 @@ CREATE TEMPORARY TABLE tmp_fullcheck AS
   WHERE s.id>0 AND s.id<100;  -- (WHEN LOW MEMORY) needs "where"
 
   -- WHEN LOW MEMORY (Python consumes a lot!) SPLIT INTO id SEGMENTS:
-	INSERT INTO tmp_fullcheck(id,c) 
+	INSERT INTO tmp_fullcheck(id,c)
 	  SELECT  s.id, lib.array_select_idx(c,array[3,6,11,14,27,  15,28,31]) as c
 	  FROM pubperson.source s, LATERAL lib.get_csvfile(s.info->>'data_item',';') g(c)
 	  WHERE s.id>=100 AND s.id<200;
-	INSERT INTO tmp_fullcheck(id,c) 
+	INSERT INTO tmp_fullcheck(id,c)
 	  SELECT  s.id, lib.array_select_idx(c,array[3,6,11,14,27,  15,28,31]) as c
 	  FROM pubperson.source s, LATERAL lib.get_csvfile(s.info->>'data_item',';') g(c)
 	  WHERE s.id>=200 AND s.id<280;
-	INSERT INTO tmp_fullcheck(id,c) 
+	INSERT INTO tmp_fullcheck(id,c)
 	  SELECT  s.id, lib.array_select_idx(c,array[3,6,11,14,27,  15,28,31]) as c
 	  FROM pubperson.source s, LATERAL lib.get_csvfile(s.info->>'data_item',';') g(c)
 	  WHERE s.id>=280 AND s.id<400;
@@ -75,14 +75,17 @@ CREATE TEMPORARY TABLE tmp_fullcheck AS
  * All TSE official data into PubPerson schema.
  */
 INSERT INTO pubperson.person(source_id,name,birthDate,info)
-  SELECT max(id) as source_id, 
-         nome, 
+  SELECT max(id) as source_id,
+         nome,
          bdate,
-         jsonb_build_object('source_ids',array_agg(id), 'vatid_cpfs',array_agg(cpf))
+         jsonb_build_object(
+           'source_ids',lib.array_distinct(array_agg(id)),
+           'vatid_cpfs',lib.array_distinct(array_agg(cpf))
+         )
   FROM (
-    SELECT id, trim(c[3]) as nome, 
+    SELECT id, trim(c[3]) as nome,
            lib.cpf_whengood(regexp_replace(c[4],'[^\d]+','','g')) as cpf,
-           lib.parse_birth_br2iso(c[5]) as bdate 
+           lib.parse_birth_br2iso(c[5]) as bdate
     FROM tmp_fullcheck
   ) t
   WHERE cpf IS NOT NULL AND bdate IS NOT NULL -- discards invalids
@@ -90,11 +93,16 @@ INSERT INTO pubperson.person(source_id,name,birthDate,info)
 ON CONFLICT DO NOTHING  -- discards duplications. (DANGER?)
 ;
 
+-------------- ERROR
+--UPDATE pubperson.person
+--SET vatid_cpf = ((info->'vatid_cpfs')->>0)::bigint
+--WHERE length((info->>'vatid_cpfs')::text)=15
+--; -- ERROR:  duplicate key value violates unique constraint "person_vatid_cpf_key"
+
+
 /**
  * After all.
  */
 REFRESH MATERIALIZED VIEW pubperson.kx_firstname;
 
 -- DROP TEMPORARY TABLE tmp_fullcheck;
-
-
