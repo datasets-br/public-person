@@ -22,7 +22,7 @@ For CSV files description, see [datapackage.json](datapackage.json).
 
 ## License
 
-This material is licensed by its maintainers under the Public Domain Dedication
+This material is licensed by its maintainers under the [Public Domain Dedication](https://creativecommons.org/publicdomain/zero/1.0/)
 and License.
 
 Nevertheless, it should be noted that this material is ultimately sourced from TSE, ....
