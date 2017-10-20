@@ -1,7 +1,7 @@
 
 ## TSE-candidatos data preparation
 
-**TSE** (Tribunal Superior Eleitoral) is a official source of data, at http://agencia.tse.jus.br/estatistica/sead/odsele/consulta_cand/
+**TSE** (Tribunal Superior Eleitoral) is a official source of data, at http://www.tse.jus.br/eleicoes/estatisticas/repositorio-de-dados-eleitorais   (old http://agencia.tse.jus.br/estatistica/sead/odsele/consulta_cand/ )
 
 The scripts will transfer all zip files to `/tmp/tse_transfer` folder and the selected data to the PostgreSQL database. 
 Use [core refresh](core-README.md) (the `python core-refresh-csv.py tse` command) to update the PubPerson's data folder with the new TSE database.
